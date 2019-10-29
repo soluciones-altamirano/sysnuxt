@@ -44,6 +44,7 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
+    '@nuxtjs/auth',
   ],
   /*
   ** Axios module configuration
@@ -51,6 +52,30 @@ export default {
   */
   axios: {
     baseURL: 'http://sysnuxt.local/'
+  },
+  auth: {
+    redirect: {
+      login: "/auth/login",
+      logout: "/",
+      callback: "/auth/login",
+      user: "/"
+    },
+    strategies: {
+      password_grant: {
+        _scheme: "local",
+        endpoints: {
+          login: {
+            url: "http://sysnuxt.local/oauth/token",
+            method: "post",
+            propertyName: "access_token"
+          },
+          logout: false,
+          user: {
+            url: "api/auth/me"
+          }
+        }
+      }
+    }
   },
   /*
   ** vuetify module configuration
