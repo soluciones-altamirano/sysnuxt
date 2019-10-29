@@ -105,9 +105,9 @@ export default {
           to: '/'
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
+          icon: 'mdi-account',
+          title: 'Users',
+          to: '/users'
         }
       ],
       miniVariant: false,

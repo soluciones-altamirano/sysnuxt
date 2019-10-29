@@ -41,4 +41,11 @@ class User extends Authenticatable
     public function findForPassport($identifier) {
         return $this->orWhere('email', $identifier)->orWhere('username', $identifier)->first();
     }
+
+    public static $rules = [
+        'name'     => 'required|max:255',
+        'username' => 'sometimes|required|max:255|unique:users',
+        'email'    => 'required|email|max:255',
+//        'password' => 'required|min:6|confirmed',
+    ];
 }

@@ -17,3 +17,6 @@ Route::group(['middleware' => 'auth:api'], function() {
     Route::get('auth/me', 'AuthApiController@local');
     Route::get('oauth/me', 'AuthApiController@oauth');
 });
+
+
+Route::resource('users', 'UserAPIController');
