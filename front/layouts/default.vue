@@ -92,9 +92,9 @@
 export default {
   data () {
     return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
+      clipped: true,
+      drawer: true,
+      fixed: true,
       items: [
         {
           icon: 'mdi-apps',
