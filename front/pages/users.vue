@@ -87,26 +87,23 @@
                 { text: 'Actions', value: 'action' },
             ],
             users: [],
-            editedIndex: -1,
             editedItem: {
+                id : 0,
                 name: '',
-                calories: 0,
-                fat: 0,
-                carbs: 0,
-                protein: 0,
+                username: '',
+                email: '',
             },
             defaultItem: {
+                id : 0,
                 name: '',
-                calories: 0,
-                fat: 0,
-                carbs: 0,
-                protein: 0,
+                username: '',
+                email: '',
             },
         }),
 
         computed: {
             formTitle () {
-                return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+                return this.editedItem.id === 0 ? 'New Item' : 'Edit Item'
             },
         },
 
@@ -142,9 +139,26 @@
                 this.dialog = true
             },
 
-            deleteItem (item) {
-                const index = this.desserts.indexOf(item)
-                confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
+            async deleteItem (item) {
+                this.editedItem = Object.assign({}, item)
+                const res = confirm('Esta seguro de eliminar el Usuario '+this.editedItem.name+' ?');
+
+                if (res){
+                    try {
+                        const url = 'api/users/'+this.editedItem.id;
+
+                        const res = await this.$axios.$delete(url);
+
+                        this.initialize();
+                        console.log(res.data);
+
+                    }catch (e) {
+                        console.log(e.response)
+                    }
+                }
+
+                this.close();
+
             },
 
             close () {
@@ -157,19 +171,39 @@
 
             async save () {
 
+                if(this.editedItem.id === 0){
 
-                try {
-                    const url = 'api/users/'+this.editedItem.id;
-                    const data = this.editedItem;
+                    console.log('Neuvo usuario');
+                    try {
+                        const url = 'api/users';
+                        const data = this.editedItem;
 
 
-                    const res = await this.$axios.$patch(url,data);
+                        const res = await this.$axios.$post(url,data);
 
-                    this.initialize();
-                    console.log(res.data);
+                        this.initialize();
+                        console.log(res.data);
 
-                }catch (e) {
-                    console.log(e)
+                    }catch (e) {
+                        console.log(e.response)
+                    }
+                }else {
+
+                    console.log('Editar usuario');
+
+                    try {
+                        const url = 'api/users/'+this.editedItem.id;
+                        const data = this.editedItem;
+
+
+                        const res = await this.$axios.$patch(url,data);
+
+                        this.initialize();
+                        console.log(res.data);
+
+                    }catch (e) {
+                        console.log(e.response)
+                    }
                 }
 
 
