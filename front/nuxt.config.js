@@ -30,6 +30,7 @@ export default {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    '@plugins/helpers',
   ],
   /*
   ** Nuxt.js dev-modules
@@ -45,6 +46,15 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     '@nuxtjs/auth',
+    ['nuxt-izitoast',
+      {
+        izitoast: {
+          position: 'bottomRight',
+          transitionIn: 'bounceInLeft',
+          transitionOut: 'fadeOutRight',
+        }
+      }
+    ]
   ],
   /*
   ** Axios module configuration

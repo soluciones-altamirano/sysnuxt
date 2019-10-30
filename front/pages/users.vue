@@ -1,26 +1,27 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="users"
-    sort-by="calories"
-    class="elevation-1"
-  >
+
+  <!--            Tabla de datos
+  ------------------------------------------------------------------------>
+  <v-data-table :headers="headers" :items="users" sort-by="calories" class="elevation-1">
+
     <template v-slot:top>
+
       <v-toolbar flat color="dark">
+
         <v-toolbar-title>Usuarios</v-toolbar-title>
-        <v-divider
-          class="mx-4"
-          inset
-          vertical
-        ></v-divider>
+
+        <v-divider class="mx-4" inset vertical></v-divider>
         <v-spacer></v-spacer>
 
 
-
+        <!--            Ventana modal del formulario
+        ------------------------------------------------------------------------>
         <v-dialog v-model="dialog" max-width="500px">
+
           <template v-slot:activator="{ on }">
             <v-btn color="primary" light class="mb-2" v-on="on">New Item</v-btn>
           </template>
+
           <v-card>
             <v-card-title>
               <span class="headline">{{ formTitle }}</span>
@@ -44,34 +45,32 @@
 
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Save</v-btn>
+              <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
+              <v-btn color="blue darken-1" text @click="save">Guardar</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
 
-
-
       </v-toolbar>
     </template>
+
+    <!--            botones de acciones
+    ------------------------------------------------------------------------>
     <template v-slot:item.action="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="editItem(item)"
-      >
-        mdi-pencil
-      </v-icon>
-      <v-icon
-        small
-        @click="deleteItem(item)"
-      >
-        mdi-delete
-      </v-icon>
+      <v-btn @click="editItem(item)" color="mr-2 primary" fab x-small dark>
+        <v-icon > mdi-pencil </v-icon>
+      </v-btn>
+      <v-btn @click="deleteItem(item)" color="mr-2 error" fab x-small dark>
+      <v-icon> mdi-delete </v-icon>
+      </v-btn>
     </template>
+
+
+    <!-- Boton para cuando no hay datos en la tabla -->
     <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize">Reset</v-btn>
+      <v-btn color="primary" @click="getDatos">Reset</v-btn>
     </template>
+
   </v-data-table>
 </template>
 
@@ -114,19 +113,20 @@
         },
 
         created () {
-            this.initialize()
+            this.getDatos()
+            this.$myInjectedFunction('works in mounted')
+
         },
 
         methods: {
-            async initialize () {
+            async getDatos () {
 
-                console.log('inicia');
                 try{
 
                     const res = await this.$axios.$get('api/users');
 
                     this.users = res.data;
-                    console.log(res.data);
+
 
                 }catch (error) {
 
@@ -135,21 +135,27 @@
             },
 
             editItem (item) {
-                this.editedItem = Object.assign({}, item)
+
+                this.editedItem = Object.assign({}, item);
                 this.dialog = true
             },
 
             async deleteItem (item) {
-                this.editedItem = Object.assign({}, item)
+
+                this.editedItem = Object.assign({}, item);
+
                 const res = confirm('Esta seguro de eliminar el Usuario '+this.editedItem.name+' ?');
 
+
+                //si da click en aceptar
                 if (res){
                     try {
                         const url = 'api/users/'+this.editedItem.id;
 
                         const res = await this.$axios.$delete(url);
 
-                        this.initialize();
+                        this.getDatos();
+
                         console.log(res.data);
 
                     }catch (e) {
@@ -162,53 +168,67 @@
             },
 
             close () {
-                this.dialog = false
+                this.dialog = false;
                 setTimeout(() => {
-                    this.editedItem = Object.assign({}, this.defaultItem)
-                    this.editedIndex = -1
+                    this.editedItem = Object.assign({}, this.defaultItem);
                 }, 300)
             },
 
             async save () {
 
-                if(this.editedItem.id === 0){
+                try {
 
-                    console.log('Neuvo usuario');
-                    try {
+                    const data = this.editedItem;
+
+                    if(this.editedItem.id === 0){
+
                         const url = 'api/users';
-                        const data = this.editedItem;
-
 
                         const res = await this.$axios.$post(url,data);
 
-                        this.initialize();
-                        console.log(res.data);
+                        this.notifySucces('Listo!','Usuario creado.');
 
-                    }catch (e) {
-                        console.log(e.response)
-                    }
-                }else {
+                    }else {
 
-                    console.log('Editar usuario');
-
-                    try {
                         const url = 'api/users/'+this.editedItem.id;
-                        const data = this.editedItem;
-
 
                         const res = await this.$axios.$patch(url,data);
 
-                        this.initialize();
-                        console.log(res.data);
+                        this.notifySucces('Listo!','Usuario actualizado.');
 
-                    }catch (e) {
-                        console.log(e.response)
+                    }
+
+                    this.getDatos();
+                    //console.log(res.data);
+
+                }catch (e) {
+                    console.log(e.response);
+
+                    const errors = e.response.data.errors;
+
+                    if(typeof errors !== 'undefined'){
+
+                        this.notifyError(errors);
                     }
                 }
 
 
                 this.close()
+            },
+            notifySucces(title,message){
+                this.$notify.success({
+                    title: title,
+                    message: message
+                })
+            },
+            notifyError(errors){
+
+                this.$notify.error({
+                    title: this.$erroresToList(errors),
+                    message: '',
+                    titleSize: 16
+                })
             }
-        },
+        }
     }
 </script>
