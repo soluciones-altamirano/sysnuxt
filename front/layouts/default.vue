@@ -1,20 +1,9 @@
 <template>
   <v-app dark>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant="miniVariant"
-      :clipped="clipped"
-      fixed
-      app
-    >
+
+    <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app>
       <v-list>
-        <v-list-item
-          v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
-        >
+        <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>
           <v-list-item-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-action>
@@ -23,12 +12,16 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+      <template v-slot:append>
+        <div class="pa-2">
+          <v-btn block @click.stop="open = true">
+            <v-icon>mdi-logout</v-icon> SALIR
+          </v-btn>
+        </div>
+      </template>
     </v-navigation-drawer>
-    <v-app-bar
-      :clipped-left="clipped"
-      fixed
-      app
-    >
+
+    <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
 <!--      <v-btn-->
 <!--        icon-->
@@ -50,41 +43,72 @@
 <!--      </v-btn>-->
       <v-toolbar-title v-text="title" />
       <v-spacer />
-      <v-btn
-        icon
-        @click.stop="rightDrawer = !rightDrawer"
-      >
-        <v-icon>mdi-menu</v-icon>
+
+<!--      <v-btn icon @click.stop="rightDrawer = !rightDrawer">-->
+<!--        <v-icon>mdi-menu</v-icon>-->
+<!--      </v-btn>-->
+
+      <v-btn icon @click.stop="open = true">
+        <v-icon>mdi-logout</v-icon>
       </v-btn>
+
     </v-app-bar>
+
     <v-content>
       <v-container>
         <nuxt />
+
       </v-container>
     </v-content>
-    <v-navigation-drawer
-      v-model="rightDrawer"
-      :right="right"
-      temporary
-      fixed
-    >
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light>
-              mdi-repeat
-            </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <v-footer
-      :fixed="fixed"
-      app
-    >
+
+
+<!--    <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>-->
+<!--      <v-list>-->
+<!--        <v-list-item @click.native="right = !right">-->
+<!--          <v-list-item-action>-->
+<!--            <v-icon light>-->
+<!--              mdi-repeat-->
+<!--            </v-icon>-->
+<!--          </v-list-item-action>-->
+<!--          <v-list-item-title>Switch drawer (click me)</v-list-item-title>-->
+<!--        </v-list-item>-->
+<!--      </v-list>-->
+<!--    </v-navigation-drawer>-->
+
+
+    <v-footer :fixed="fixed" app>
       <span>&copy; 2019</span>
     </v-footer>
+
+
+    <v-dialog v-model="open" max-width="350" light>
+      <v-card>
+        <v-card-title class="headline warning" >
+          <v-icon>mdi-warning</v-icon> Salir del Sistema!
+        </v-card-title>
+
+        <v-card-text>
+
+          <div class="my-4 subtitle-1 black--text">
+            Si esta seguro de salir del sistema presione el botón sí
+          </div>
+
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn outlined  color="gray" text @click="open = false">
+            NO
+          </v-btn>
+
+          <v-btn outlined  color="error"  text @click="logout">
+            SÍ
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
   </v-app>
 </template>
 
@@ -93,28 +117,58 @@
   import pkg from '../package'
 
 export default {
-  data () {
-    return {
-      clipped: true,
-      drawer: true,
-      fixed: true,
-      items: [
-        {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/'
+    data () {
+      return {
+        open: false,
+        clipped: true,
+        drawer: true,
+        fixed: true,
+        items: [
+          {
+            icon: 'mdi-apps',
+            title: 'Welcome',
+            to: '/'
+          },
+          {
+            icon: 'mdi-account',
+            title: 'Users',
+            to: '/users'
+          }
+        ],
+        miniVariant: false,
+        right: true,
+        rightDrawer: false,
+        title: pkg.name.toUpperCase()
+      }
+    },
+    methods:{
+        async logout(){
+            try{
+                await this.$auth.logout();
+
+                this.$router.replace("/");
+
+                this.notifySucces('Listo','Salio del sistema');
+                this.open=false;
+
+            }catch (e) {
+                console.log(e)
+            }
         },
-        {
-          icon: 'mdi-account',
-          title: 'Users',
-          to: '/users'
+        notifySucces(title,message){
+            this.$notify.success({
+                title: title,
+                message: message
+            })
+        },
+        notifyError(errors){
+
+            this.$notify.error({
+                title: this.$erroresToList(errors),
+                message: '',
+                titleSize: 16
+            })
         }
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      title: pkg.name.toUpperCase()
     }
-  }
 }
 </script>
