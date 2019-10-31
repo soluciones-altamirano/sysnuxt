@@ -44,30 +44,14 @@
   #### crear archivo de entornos del backend
     cp .env.example .env
     
-    
   ##### generar clave de encartación para seguridad de la aplicación
     php artisan key:generate  
     
-  ##### Instalar clientes por defecto de Laravel Passport (Autenticación para apis) 
-    php artisan passport:install
-    
   ##### crear tablas y datos
     php artisan migrate --seed
-   
-   
-  ##### Editar Virtual Host (Dejar consola abierta)
     
-  ![](editar_virtual_host.PNG)
-    
-      agregar /back/public a root
-    
-  ![](editar_virtual_host2.PNG)
-  
-  guarda el archivo
-  
-  ### Recargar servidor web de laragon para que se genere el virtual host
-  
-  ![](recargar_webserver_laragon.png)
+  ##### Instalar clientes por defecto de Laravel Passport (Autenticación para apis) 
+    php artisan passport:install
   
   ##### Acceder a la carpeta del front (Terminal que dejaste abierta)
     
@@ -86,8 +70,22 @@
     
   ![](PASSPORT_PASSWORD_GRANT_SECRET.PNG)  
   
+  ##### Editar Virtual Host (Dejar consola abierta)
+      
+  ![](editar_virtual_host.PNG)
+      
+     agregar /back/public a root
+      
+  ![](editar_virtual_host2.PNG)
+    
+    guarda el archivo
+    
+  ### Recargar servidor web de laragon para que se genere el virtual host
+    
+  ![](recargar_webserver_laragon.png)
+  
   #### correr aplicacion front
-      npm run dev  
+      npm run dev  (tienes que estar en sysnuxt/front)
       
   ### Puedes ingresar por el navegador con http://localhost:3333/   
      
