@@ -3,13 +3,19 @@
 namespace App;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens,Notifiable;
+    use HasApiTokens,Notifiable,HasRoles,SoftDeletes;
+
+    protected $with = ['permissions'];
+
+    protected $appends = ['all_permissions'];
 
     /**
      * The attributes that are mass assignable.
@@ -48,4 +54,10 @@ class User extends Authenticatable
         'email'    => 'required|email|max:255',
 //        'password' => 'required|min:6|confirmed',
     ];
+
+
+    public function getAllPermissionsAttribute()
+    {
+        return $this->getAllPermissions();
+    }
 }

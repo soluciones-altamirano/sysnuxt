@@ -11,6 +11,12 @@
 |
 */
 
+use App\User;
+
 Route::get('/', function () {
-    return view('welcome');
+
+    $user = User::find(1);
+
+//    dd($user->toArray());
+    return view('welcome',compact('user'));
 });
