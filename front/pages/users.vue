@@ -2,7 +2,7 @@
 
   <!--            Tabla de datos
   ------------------------------------------------------------------------>
-  <v-data-table :headers="headers" :items="users" sort-by="calories" class="elevation-1">
+  <v-data-table :headers="headers" :items="users" sort-by="calories" class="elevation-1" :loading="loading" loading-text="Cargando datos, por favor espere...">
 
     <template v-slot:top>
 
@@ -77,8 +77,10 @@
 <script>
 
     export default {
+        middleware: 'auth',
         data: () => ({
             dialog: false,
+            loading: true,
             headers: [
                 { text: 'Username', value: 'username',},
                 { text: 'Nombre', value: 'name' },
@@ -126,12 +128,14 @@
                     const res = await this.$axios.$get('api/users');
 
                     this.users = res.data;
-
+                    this.loading = false;
 
                 }catch (error) {
 
                     console.log(error)
                 }
+
+
             },
 
             editItem (item) {
