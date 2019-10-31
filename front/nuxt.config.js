@@ -1,4 +1,6 @@
 import colors from 'vuetify/es5/util/colors'
+import pkg from './package'
+require('dotenv').config();
 
 export default {
   mode: 'universal',
@@ -7,11 +9,11 @@ export default {
   */
   head: {
     titleTemplate: '%s - ' + process.env.npm_package_name,
-    title: process.env.npm_package_name || '',
+    title: pkg.name,
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
+      { hid: 'description', name: 'description', content: pkg.description }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
@@ -46,6 +48,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     '@nuxtjs/auth',
+    '@nuxtjs/dotenv',
     ['nuxt-izitoast',
       {
         izitoast: {
@@ -61,7 +64,8 @@ export default {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL: 'http://sysnuxt.local/'
+    baseURL: process.env.LARAVEL_ENDPOINT
+
   },
   auth: {
     redirect: {
@@ -75,7 +79,7 @@ export default {
         _scheme: "local",
         endpoints: {
           login: {
-            url: "http://sysnuxt.local/oauth/token",
+            url: process.env.LARAVEL_OAUTH,
             method: "post",
             propertyName: "access_token"
           },

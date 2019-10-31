@@ -1,53 +1,32 @@
 <template>
-  <v-container
-    class="fill-height"
-    fluid
-  >
-    <v-row
-      align="center"
-      justify="center" class="mt-5" >
-      <v-col
-        cols="12"
-        sm="8"
-        md="4"
-      >
+  <v-container class="fill-height" fluid>
+
+    <v-row align="center" justify="center" class="mt-5" >
+      <v-col cols="12" sm="8" md="4">
+
+        <v-form @submit.prevent="login">
           <v-card class="elevation-12">
-            <v-toolbar
-              color="primary"
-              dark
-              flat
-            >
+
+            <v-toolbar color="primary" dark flat>
               <v-toolbar-title v-text="name" class="font-weight-bold"></v-toolbar-title>
               <v-spacer />
-
             </v-toolbar>
-            <v-card-text>
-              <v-form >
-                <v-text-field
-                  label="Login"
-                  name="login"
-                  prepend-icon="mdi-account"
-                  type="text"
-                  v-model="form.email"
-                />
 
-                <v-text-field
-                  id="password"
-                  label="Password"
-                  name="password"
-                  prepend-icon="mdi-lock"
-                  type="password"
-                  v-model="form.password"
-                />
-              </v-form>
+            <v-card-text>
+
+                <v-text-field label="Login"  prepend-icon="mdi-account" type="text" v-model="form.email"/>
+
+                <v-text-field label="Password" prepend-icon="mdi-lock" type="password" v-model="form.password"/>
+
             </v-card-text>
             <v-card-actions>
               <v-spacer />
-              <v-btn color="primary" @click="login">
+              <v-btn color="primary" type="submit">
                 <span v-text="loading ? 'Ingresando' : 'Ingresar'"></span>   <v-icon v-show="loading">mdi-loading mdi-spin</v-icon>
               </v-btn>
             </v-card-actions>
           </v-card>
+        </v-form>
       </v-col>
     </v-row>
   </v-container>
@@ -77,8 +56,8 @@
                 let data = {
                     data: {
                         grant_type: "password",
-                        client_id: "3",
-                        client_secret: "AnCcP6KLuM6lHMITCmrUA0CT2tP4MBnTAwor1KQ1",
+                        client_id: process.env.PASSPORT_PASSWORD_GRANT_ID,
+                        client_secret: process.env.PASSPORT_PASSWORD_GRANT_SECRET,
                         scope: "*",
                         username: this.form.email,
                         password: this.form.password

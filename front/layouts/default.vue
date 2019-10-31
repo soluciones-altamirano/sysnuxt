@@ -147,7 +147,7 @@ export default {
             try{
                 await this.$auth.logout();
 
-                this.$router.replace("/");
+                this.$router.replace("/auth/login");
 
                 this.notifySuccess('Listo','Salio del sistema');
                 this.open=false;
