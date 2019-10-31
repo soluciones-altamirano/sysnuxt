@@ -17,7 +17,7 @@
               dark
               flat
             >
-              <v-toolbar-title v-text="name"></v-toolbar-title>
+              <v-toolbar-title v-text="name" class="font-weight-bold"></v-toolbar-title>
               <v-spacer />
 
             </v-toolbar>
@@ -44,7 +44,7 @@
             <v-card-actions>
               <v-spacer />
               <v-btn color="primary" @click="login">
-                Ingresar   <v-icon v-show="loading">mdi-loading mdi-spin</v-icon>
+                <span v-text="loading ? 'Ingresando' : 'Ingresar'"></span>   <v-icon v-show="loading">mdi-loading mdi-spin</v-icon>
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -61,7 +61,7 @@
         name: "login",
         data(){
             return {
-                name: pkg.name,
+                name: pkg.name.toUpperCase(),
                 loading: false,
                 form: {
                     email:'',
@@ -85,20 +85,27 @@
                     }
                 };
 
-                console.log('login');
-                console.log(data);
-
 
                 try {
                     let login = await this.$auth.loginWith("password_grant", data)
 
                     this.$router.replace("/");
 
-                    // this.$toast.success('Ingreso al sistema con éxito',{duration: 5000})
+                    this.notifySuccess('Listo','Ingreso al sistema.');
+
+
                 }catch (e) {
 
-                    // this.$toast.error('Algo a salido Mal',{duration: 5000});
-                    console.log(e)
+                    console.log(e.response);
+
+                    var error = e.response.data.message;
+
+                    if(typeof error !== 'undefined'){
+
+                        this.notifyError(error);
+                    }
+
+                    this.loading = false
                 }
 
 

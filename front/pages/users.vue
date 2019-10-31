@@ -115,8 +115,7 @@
         },
 
         created () {
-            this.getDatos()
-            this.$myInjectedFunction('works in mounted')
+            this.getDatos();
 
         },
 
@@ -160,7 +159,8 @@
 
                         this.getDatos();
 
-                        console.log(res.data);
+
+                        this.notifySuccess('Listo!',res.data.message);
 
                     }catch (e) {
                         console.log(e.response)
@@ -190,17 +190,15 @@
 
                         const res = await this.$axios.$post(url,data);
 
-                        this.notifySucces('Listo!','Usuario creado.');
-
                     }else {
 
                         const url = 'api/users/'+this.editedItem.id;
 
                         const res = await this.$axios.$patch(url,data);
 
-                        this.notifySucces('Listo!','Usuario actualizado.');
-
                     }
+
+                    this.notifySuccess('Listo!',res.data.message);
 
                     this.getDatos();
                     //console.log(res.data);
@@ -208,30 +206,16 @@
                 }catch (e) {
                     console.log(e.response);
 
-                    const errors = e.response.data.errors;
+                    var errors = e.response.data.errors;
 
                     if(typeof errors !== 'undefined'){
 
-                        this.notifyError(errors);
+                        this.notifyErrorList(errors);
                     }
                 }
 
 
                 this.close()
-            },
-            notifySucces(title,message){
-                this.$notify.success({
-                    title: title,
-                    message: message
-                })
-            },
-            notifyError(errors){
-
-                this.$notify.error({
-                    title: this.$erroresToList(errors),
-                    message: '',
-                    titleSize: 16
-                })
             }
         }
     }

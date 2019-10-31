@@ -117,6 +117,7 @@
   import pkg from '../package'
 
 export default {
+    middleware: 'auth',
     data () {
       return {
         open: false,
@@ -148,26 +149,12 @@ export default {
 
                 this.$router.replace("/");
 
-                this.notifySucces('Listo','Salio del sistema');
+                this.notifySuccess('Listo','Salio del sistema');
                 this.open=false;
 
             }catch (e) {
                 console.log(e)
             }
-        },
-        notifySucces(title,message){
-            this.$notify.success({
-                title: title,
-                message: message
-            })
-        },
-        notifyError(errors){
-
-            this.$notify.error({
-                title: this.$erroresToList(errors),
-                message: '',
-                titleSize: 16
-            })
         }
     }
 }
