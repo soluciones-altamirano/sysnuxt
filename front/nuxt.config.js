@@ -1,8 +1,8 @@
-import colors from 'vuetify/es5/util/colors'
-import pkg from './package'
+const colors = require('vuetify/es5/util/colors').default
+const pkg = require('./package')
 require('dotenv').config();
 
-export default {
+module.exports = {
   mode: 'universal',
   /*
   ** Headers of the page
