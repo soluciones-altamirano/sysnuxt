@@ -135,8 +135,19 @@ export default {
           {
             icon: 'mdi-account',
             title: 'Users',
-            to: '/users'
+            to: 'admin/users'
+          },
+          {
+              icon: 'mdi-domain',
+              title: 'Empresas',
+              to: 'admin/empresas'
+          },
+          {
+              icon: 'mdi-store',
+              title: 'Sucursales',
+              to: 'admin/sucursales'
           }
+
         ],
         miniVariant: false,
         right: true,
