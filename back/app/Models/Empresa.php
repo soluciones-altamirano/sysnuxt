@@ -29,7 +29,7 @@ class Empresa extends Model
     const UPDATED_AT = 'updated_at';
 
 
-
+    protected $with = ['sucursales'];
 
     public $fillable = [
         'nombre',
@@ -80,7 +80,7 @@ class Empresa extends Model
      **/
     public function sucursales()
     {
-        return $this->hasMany(\App\Models\Sucursale::class, 'empresa_id');
+        return $this->hasMany(Sucursal::class, 'empresa_id');
     }
 
     /**

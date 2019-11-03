@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Traits\GlobalScopeEmpresa;
 use App\User;
 use Illuminate\Database\Eloquent\Model as Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Sucursal
@@ -22,6 +24,8 @@ use Illuminate\Database\Eloquent\Model as Model;
  */
 class Sucursal extends Model
 {
+
+    use SoftDeletes,GlobalScopeEmpresa;
 
     public $table = 'sucursales';
 
