@@ -19,5 +19,9 @@ class UsersTableSeeder extends Seeder
 
             $user->syncPermissions(['permiso directo 1','permiso directo 2']);
         });
+
+        factory(User::class,9)->create()->each(function (User $user){
+            $user->syncRoles([Role::OPERADOR]);
+        });
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
 use App\Models\Empresa;
+use App\User;
 use Carbon\Carbon;
-use http\Client\Curl\User;
 use Illuminate\Database\Seeder;
 
 class EmpresaSeeder extends Seeder
@@ -14,11 +14,11 @@ class EmpresaSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Models\Empresa::class,10)->create()->each(function (Empresa $empresa){
+        factory(Empresa::class,10)->create()->each(function (Empresa $empresa){
 
-            $user = \App\User::all()->random()->id;
+            $user = User::noResponsables()->get()->random()->id;
 
-            $empresa->responsable()->attach([$user = ['asignado' => Carbon::now() ] ]);
+            $empresa->responsable()->attach($user, ['asignado' => Carbon::now() ]);
 
         });
     }
