@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\Empresa;
+use App\Models\Sucursal;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -125,6 +126,14 @@ class User extends Authenticatable
     public function scopeNoResponsables($query)
     {
         $query->whereDoesntHave('empresas',function ($q){
+            $q->whereNull('desasignado');
+        });
+    }
+
+
+    public function scopeNoAdminSucursal($query)
+    {
+        $query->whereDoesntHave('sucursales',function ($q){
             $q->whereNull('desasignado');
         });
     }

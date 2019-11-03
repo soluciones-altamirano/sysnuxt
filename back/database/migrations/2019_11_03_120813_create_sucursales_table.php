@@ -20,9 +20,9 @@ class CreateSucursalesTable extends Migration {
 			$table->char('telefono', 25);
 			$table->string('email');
 			$table->string('slug')->nullable();
-			$table->timestamps();
-			$table->softDeletes();
-			$table->integer('empresa_id')->index('fk_sucursales_empresas_idx');
+            $table->integer('empresa_id')->index('fk_sucursales_empresas_idx');
+            $table->timestamps();
+            $table->softDeletes();
 		});
 	}
 

@@ -23,5 +23,8 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     Route::resource('empresas', 'EmpresaAPIController');
 
+
+    Route::resource('sucursales', 'SucursalAPIController');
+
 });
 
