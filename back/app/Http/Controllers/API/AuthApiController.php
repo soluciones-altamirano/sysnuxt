@@ -9,7 +9,7 @@ class AuthApiController extends Controller
 {
     public function local()
     {
-        return response()->json(['user' => auth()->user()]);
+        return response()->json(auth()->user());
     }
 
     public function oauth()
