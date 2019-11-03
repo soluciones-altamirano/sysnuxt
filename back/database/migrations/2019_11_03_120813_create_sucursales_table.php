@@ -22,7 +22,7 @@ class CreateSucursalesTable extends Migration {
 			$table->string('slug')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
-			$table->integer('empresas_id')->index('fk_sucursales_empresas_idx');
+			$table->integer('empresa_id')->index('fk_sucursales_empresas_idx');
 		});
 	}
 

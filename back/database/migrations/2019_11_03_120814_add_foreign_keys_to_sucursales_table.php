@@ -14,7 +14,7 @@ class AddForeignKeysToSucursalesTable extends Migration {
 	{
 		Schema::table('sucursales', function(Blueprint $table)
 		{
-			$table->foreign('empresas_id', 'fk_sucursales_empresas')->references('id')->on('empresas')->onUpdate('NO ACTION')->onDelete('NO ACTION');
+			$table->foreign('empresa_id', 'fk_sucursales_empresas')->references('id')->on('empresas')->onUpdate('NO ACTION')->onDelete('NO ACTION');
 		});
 	}
 
