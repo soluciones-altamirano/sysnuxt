@@ -26,5 +26,7 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     Route::resource('sucursales', 'SucursalAPIController');
 
+    Route::resource('options', 'OptionAPIController');
+
 });
 

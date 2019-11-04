@@ -35,5 +35,7 @@ class DatabaseSeeder extends Seeder
             $u->save();
 
         }
+
+        $this->call(OptionSeeder::class);
     }
 }

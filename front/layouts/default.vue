@@ -146,6 +146,11 @@ export default {
               icon: 'mdi-store',
               title: 'Sucursales',
               to: '/admin/sucursales'
+          },
+          {
+              icon: 'mdi-folder-open',
+              title: 'Prueba',
+              to: '/prueba'
           }
 
         ],
