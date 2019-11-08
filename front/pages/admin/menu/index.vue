@@ -8,20 +8,20 @@
     >
       <v-sheet class="pa-4 gray lighten-2" color="">
         <v-text-field v-model="search"
-          label="Buscar en opciones..."
-          dark
-          flat
-          solo-inverted
-          hide-details
-          clearable
-          clear-icon="mdi-close-circle-outline"
+                      label="Buscar en opciones..."
+                      dark
+                      flat
+                      solo-inverted
+                      hide-details
+                      clearable
+                      clear-icon="mdi-close-circle-outline"
                       onautocomplete="off"
         ></v-text-field>
 
         <v-checkbox v-model="caseSensitive"
-          dark
-          hide-details
-          label="Case sensitive search" color="white"
+                    dark
+                    hide-details
+                    label="Case sensitive search" color="white"
         ></v-checkbox>
 
       </v-sheet>
@@ -29,12 +29,14 @@
       <v-card-text>
 
         <v-treeview :items="items"
-          :search="search"
-          :filter="filter"
-          :open.sync="open"
-          activatable
-          item-key="name"
-          open-on-click
+                    :search="search"
+                    :filter="filter"
+                    :open.sync="open"
+                    activatable
+                    item-key="id"
+                    open-on-click
+                    :active.sync="active"
+                    return-object
         >
           <template v-slot:prepend="{ item }">
             <v-icon v-text="`${item.icono_l}`"></v-icon>
@@ -58,43 +60,51 @@
         },
         created(){
             this.consolaJs("Componente prueba creado")
-            this.getDatos();
+            // this.getDatos();
         },
         data: () => ({
-            open: [1, 2],
+            open: [],
             search: null,
             caseSensitive: false,
             items: [],
+            active: []
         }),
+
+        async asyncData ({ $axios }) {
+
+
+            try{
+                const  res  = await $axios.$get('api/options');
+
+                return { items: res.data }
+
+            }catch (e) {
+                return { error : e}
+            }
+
+        },
         computed: {
             filter () {
                 return this.caseSensitive
                     ? (item, search, textKey) => item[textKey].indexOf(search) > -1
                     : undefined
             },
+            selected () {
+
+                const item = this.active[0];
+
+                return item;
+            }
         },
         watch: {
-            loading (val) {
-                val || this.getDatos()
+            selected (item) {
+                this.consolaJs('redirect to :',item.ruta);
+
+                this.$router.replace(item.ruta);
             },
         },
         methods: {
-            async getDatos () {
 
-                this.consolaJs("método get datos prueba");
-
-                try{
-
-                    const res = await this.$axios.$get('api/options');
-                    this.items = res.data;
-
-                }catch (error) {
-
-                    console.log(error)
-                }
-
-
-            }
         }
     }
 </script>
