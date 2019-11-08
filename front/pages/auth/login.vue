@@ -21,8 +21,8 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer />
-              <v-btn color="primary" type="submit">
-                <span v-text="loading ? 'Ingresando' : 'Ingresar'"></span>   <v-icon v-show="loading">mdi-loading mdi-spin</v-icon>
+              <v-btn :color="loading ? 'success' : 'primary'" type="submit">
+                <span v-text="loading ? 'Ingresando...' : 'Ingresar'" ></span>   <v-icon v-show="loading">mdi-loading mdi-spin</v-icon>
               </v-btn>
             </v-card-actions>
           </v-card>
