@@ -63,7 +63,6 @@ class Option extends Model
      * @var array
      */
     public static $rules = [
-        'option_id' => 'required',
         'nombre' => 'required',
         'ruta' => 'required',
         'icono_l' => 'required'

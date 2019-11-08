@@ -48,15 +48,15 @@ class OptionSeeder extends Seeder
         });
 
 
-        if (app()->environment()=='local'){
-
-            factory(Option::class,10)->create(['ruta' => ''])->each(function (Option $option){
-                factory(Option::class,rand(1,5))->create(['ruta' => '','option_id' => $option->id])->each(function (Option $option){
-                    factory(Option::class,rand(1,5))->create(['option_id' => $option->id]);
-                });
-            });
-
-        }
+//        if (app()->environment()=='local'){
+//
+//            factory(Option::class,10)->create(['ruta' => ''])->each(function (Option $option){
+//                factory(Option::class,rand(1,5))->create(['ruta' => '','option_id' => $option->id])->each(function (Option $option){
+//                    factory(Option::class,rand(1,5))->create(['option_id' => $option->id]);
+//                });
+//            });
+//
+//        }
 
     }
 }
