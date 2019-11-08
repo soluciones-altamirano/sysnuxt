@@ -78,6 +78,10 @@
       <v-btn @click="editItem(item)" color="mr-2 primary" fab x-small dark>
         <v-icon > mdi-pencil </v-icon>
       </v-btn>
+
+      <v-btn @click="menu(item)" color="mr-2 teal" fab x-small dark>
+        <v-icon > mdi-format-list-bulleted-type </v-icon>
+      </v-btn>
       <v-btn @click="deleteItem(item)" color="mr-2 error" fab x-small dark>
       <v-icon> mdi-delete </v-icon>
       </v-btn>
@@ -90,6 +94,9 @@
     </template>
 
   </v-data-table>
+
+
+
 </template>
 
 <script>
@@ -168,7 +175,9 @@
                 this.editedItem = Object.assign({}, item);
                 this.dialog = true
             },
-
+            menu(item){
+                this.$router.replace('/admin/users/menu/'+item.id)
+            },
             async deleteItem (item) {
 
                 this.editedItem = Object.assign({}, item);

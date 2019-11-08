@@ -8,6 +8,7 @@ use App\User;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
+use Illuminate\Support\Facades\DB;
 use Response;
 
 /**
@@ -132,5 +133,33 @@ class UserAPIController extends AppBaseController
         $user->delete();
 
         return $this->sendResponse($id, 'User deleted successfully');
+    }
+
+    public function storeMenu(User $user,Request $request)
+    {
+
+        $success = true;
+
+        try {
+            DB::beginTransaction();
+
+            $user->options()->sync($request->all());
+
+            $user->load('options');
+
+        } catch (\Exception $exception) {
+            DB::rollBack();
+
+
+            return $this->sendError($exception->getMessage());
+        }
+
+
+        DB::commit();
+
+
+        return $this->sendResponse($user,' menu de usuario '.$user->name.' actualizado.');
+
+
     }
 }

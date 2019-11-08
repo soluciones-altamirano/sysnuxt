@@ -20,6 +20,7 @@ Route::group(['middleware' => 'auth:api'], function() {
 
 
     Route::resource('users', 'UserAPIController');
+    Route::post('users/menu/store/{user}', 'UserAPIController@storeMenu');
 
     Route::resource('empresas', 'EmpresaAPIController');
 

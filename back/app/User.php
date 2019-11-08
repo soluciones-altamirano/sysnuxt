@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
-use PhpOption\Option;
+use App\Models\Option;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
@@ -35,7 +35,7 @@ class User extends Authenticatable
 {
     use HasApiTokens,Notifiable,HasRoles,SoftDeletes;
 
-    protected $with = ['permissions'];
+    protected $with = ['permissions','options'];
 
     protected $appends = ['all_permissions'];
 
