@@ -5,9 +5,11 @@ import Vue from 'vue'
 Vue.mixin({
   methods:{
 
-    consolaJs(data,...otherData) {
-      if (process.env.DEBUG || true){
-        console.log(data,otherData);
+    consolaJs(/*...*/) {
+      if (process.env.DEBUG || true) {
+        for (var i = 0; i < arguments.length; i++) {
+          console.log(arguments[i]);
+        }
       }
     },
     errorToList(errors){
