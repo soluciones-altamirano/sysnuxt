@@ -1,54 +1,11 @@
 <template>
-  <v-app >
+  <v-app light>
 
     <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app >
-<!--      <v-list>-->
-<!--        <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>-->
-<!--          <v-list-item-action>-->
-<!--            <v-icon>{{ item.icon }}</v-icon>-->
-<!--          </v-list-item-action>-->
-<!--          <v-list-item-content>-->
-<!--            <v-list-item-title v-text="item.title" />-->
-<!--          </v-list-item-content>-->
-<!--        </v-list-item>-->
-<!--      </v-list>-->
 
-      <v-sheet class="pa-2 gray lighten-2" color="">
-        <v-text-field v-model="search"
-                      label="Buscar en opciones..."
-                      dark
-                      flat
-                      solo-inverted
-                      hide-details
-                      clearable
-                      clear-icon="mdi-close-circle-outline"
-                      onautocomplete="off"
-        ></v-text-field>
 
-        <v-checkbox v-model="caseSensitive"
-                    dark
-                    hide-details
-                    label="Distingue mayúsculas y minúsculas" color="white"
-        ></v-checkbox>
 
-      </v-sheet>
-
-      <hr>
-      <v-treeview :items="items"
-                  :search="search"
-                  :filter="filter"
-                  :open.sync="openMenu"
-                  activatable
-                  item-key="id"
-                  open-on-click
-                  :active.sync="active"
-                  return-object
-      >
-        <template v-slot:prepend="{ item }">
-          <v-icon v-text="`${item.icono_l}`"></v-icon>
-        </template>
-
-      </v-treeview>
+      <sidebar></sidebar>
 
 
       <template v-slot:append>
@@ -59,6 +16,7 @@
           </v-btn>
         </div>
       </template>
+
     </v-navigation-drawer>
 
     <v-app-bar :clipped-left="clipped" fixed app dark color="indigo">
@@ -66,22 +24,10 @@
       <v-btn icon @click.stop="miniVariant = !miniVariant" class="d-none d-sm-flex">
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
-<!--      <v-btn-->
-<!--        icon-->
-<!--        @click.stop="clipped = !clipped"-->
-<!--      >-->
-<!--        <v-icon>mdi-application</v-icon>-->
-<!--      </v-btn>-->
-<!--      <v-btn-->
-<!--        icon-->
-<!--        @click.stop="fixed = !fixed"-->
-<!--      >-->
-<!--        <v-icon>mdi-minus</v-icon>-->
-<!--      </v-btn>-->
+
       <v-toolbar-title v-text="title" />
-      <v-spacer />
 
-
+      <v-spacer /><!-- espacio para mover los sig iconos a la derecha -->
 
       <v-btn icon @click.stop="open = true">
         <v-icon>mdi-logout</v-icon>
@@ -93,10 +39,9 @@
 
     </v-app-bar>
 
-    <v-content light>
-      <v-container  light>
+    <v-content>
+      <v-container >
         <nuxt />
-
       </v-container>
     </v-content>
 
@@ -117,9 +62,7 @@
     </v-navigation-drawer>
 
 
-    <v-footer :fixed="fixed" app>
-      <span>&copy; 2019</span>
-    </v-footer>
+    <footer></footer>
 
 
     <v-dialog v-model="open" max-width="350" light>
@@ -151,16 +94,20 @@
     </v-dialog>
 
   </v-app>
+
 </template>
 
 <script>
 
   import pkg from '../package'
+  import Sidebar from "../components/Sidebar/Sidebar";
+  import Footer from "../components/Footer/Footer";
+
 
 export default {
+    components: {Footer, Sidebar},
     middleware: 'auth',
     created(){
-      this.getMenu()
     },
     data () {
       return {
@@ -169,11 +116,6 @@ export default {
         drawer: true,
         fixed: true,
 
-        openMenu: [],
-        search: null,
-        caseSensitive: false,
-        active: [],
-        items: [],
 
         miniVariant: false,
         right: true,
@@ -194,40 +136,7 @@ export default {
             }catch (e) {
                 console.log(e)
             }
-        },
-        async getMenu(){
-            try{
-                const  res  = await this.$axios.$get('api/options');
-
-                console.log(res);
-
-                return  this.items= res.data
-
-            }catch (e) {
-
-                console.log(e)
-            }
         }
-    },
-    computed:{
-        filter () {
-            return this.caseSensitive
-                ? (item, search, textKey) => item[textKey].indexOf(search) > -1
-                : undefined
-        },
-        selected () {
-
-            const item = this.active[0];
-
-            return item;
-        }
-    },
-    watch: {
-        selected (item) {
-            this.consolaJs('redirect to :',item.ruta);
-
-            this.$router.replace(item.ruta);
-        },
-    },
+    }
 }
 </script>
