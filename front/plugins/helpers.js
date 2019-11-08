@@ -52,6 +52,24 @@ Vue.mixin({
         titleSize: 16
       })
     },
+    pluckArrayObjets(array,value,key){
+
+        const arrayObjects = array.map(function (item,val)  {
+
+            const entradas = Object.entries(item);
+
+            for (const [key, val] of entradas) {
+                if (key==value){
+                  return val
+                }
+            }
+
+            return entradas[value];
+        })
+
+
+        return arrayObjects;
+    }
   }
 })
 
