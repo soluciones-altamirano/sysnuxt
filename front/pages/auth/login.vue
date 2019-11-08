@@ -72,6 +72,8 @@
 
                     this.notifySuccess('Listo','Ingreso al sistema.');
 
+                    this.$store.dispatch('menu/load')
+
 
                 }catch (e) {
 
