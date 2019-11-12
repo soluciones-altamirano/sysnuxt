@@ -2,6 +2,20 @@
 
   <div>
 
+    <v-list color="gray" class="py-0 px-0 ">
+      <v-list-item  >
+          <v-list-item-action class="my-2">
+            <v-avatar>
+              <img :src="$auth.user.img" :alt="$auth.user.username">
+            </v-avatar>
+          </v-list-item-action>
+          <v-list-item-content>
+              {{$auth.user.name}}
+          </v-list-item-content>
+      </v-list-item>
+    </v-list>
+    <hr>
+
     <v-sheet class="pa-2 gray lighten-2" color="">
       <v-text-field v-model="search"
                     label="Buscar en opciones..."
@@ -14,15 +28,15 @@
                     onautocomplete="off"
       ></v-text-field>
 
-      <v-checkbox v-model="caseSensitive"
-                  dark
-                  hide-details
-                  label="Distingue mayúsculas y minúsculas" color="white"
-      ></v-checkbox>
+<!--      <v-checkbox v-model="caseSensitive"-->
+<!--                  dark-->
+<!--                  hide-details-->
+<!--                  label="Distingue mayúsculas y minúsculas" color="white"-->
+<!--      ></v-checkbox>-->
 
     </v-sheet>
 
-    <hr>
+<!--    <hr>-->
 
     <!--      <v-list>-->
     <!--        <v-list-item v-for="(item, i) in items" :key="i" :to="item.to" router exact>-->
@@ -51,6 +65,10 @@
         <v-icon v-text="`${item.icono_l}`"></v-icon>
       </template>
 
+      <template v-slot:label="{item}">
+          <span v-text="item.name" v-if="!mini"></span>
+      </template>
+
     </v-treeview>
   </div>
 </template>
@@ -60,6 +78,11 @@
 
     export default {
         name: "sidebar",
+        props:{
+          mini: {
+              type: Boolean
+          }
+        },
         data() {
             return{
                 openMenu: [],

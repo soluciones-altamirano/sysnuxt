@@ -5,7 +5,7 @@
 
 
 
-      <sidebar></sidebar>
+      <sidebar :mini="miniVariant"></sidebar>
 
 
       <template v-slot:append>
@@ -28,6 +28,10 @@
       <v-toolbar-title v-text="title" />
 
       <v-spacer /><!-- espacio para mover los sig iconos a la derecha -->
+
+      <v-avatar>
+        <img :src="$auth.user.img" :alt="$auth.user.username">
+      </v-avatar>
 
       <v-btn icon @click.stop="open = true">
         <v-icon>mdi-logout</v-icon>
