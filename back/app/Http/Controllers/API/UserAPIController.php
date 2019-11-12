@@ -54,8 +54,14 @@ class UserAPIController extends AppBaseController
      */
     public function store(CreateUserAPIRequest $request)
     {
+
+        $file = $request->file('avatar');
+
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
+        $input['avatar'] = $file->hashName();
+
+        $file->store('avatars');
 
         $user = $this->userRepository->create($input);
 

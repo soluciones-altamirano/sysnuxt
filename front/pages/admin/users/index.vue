@@ -4,6 +4,13 @@
   ------------------------------------------------------------------------>
   <v-data-table :headers="headers" :items="users" sort-by="calories" class="elevation-1" :loading="loadingDatos" loading-text="Cargando datos, por favor espere...">
 
+    <template v-slot:item.avatar="{ item }">
+      <v-avatar>
+        <img :src="item.img" :alt="item.username">
+      </v-avatar>
+    </template>
+
+
     <template v-slot:top>
 
       <v-toolbar flat color="dark">
@@ -52,6 +59,18 @@
                     <v-col cols="12" sm="6" md="6" v-show="!editando">
 
                       <v-text-field type="password" v-model="editedItem.password_confirmation" label="Confirmar Contraseña"></v-text-field>
+                    </v-col>
+
+                    <v-col>
+                      <v-file-input
+                        :rules="rules"
+                        accept="image/png, image/jpeg, image/bmp"
+                        placeholder="Elige un avatar"
+                        prepend-icon="mdi-camera"
+                        label="Avatar"
+                      @change="onSelectFile">
+
+                      </v-file-input>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -108,6 +127,8 @@
             loadingDatos: true,
             loading: false,
             headers: [
+                { text: 'Id', value: 'id',},
+                { text: 'Avatar', value: 'avatar',},
                 { text: 'Username', value: 'username',},
                 { text: 'Nombre', value: 'name' },
                 { text: 'Correo', value: 'email' },
@@ -121,6 +142,7 @@
                 email: '',
                 password: '',
                 password_confirmation: '',
+                avatar: null
             },
             defaultItem: {
                 id : 0,
@@ -129,7 +151,11 @@
                 email: '',
                 password: '',
                 password_confirmation: '',
+                avatar: null
             },
+            rules: [
+                value => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
+            ],
         }),
 
         computed: {
@@ -153,6 +179,12 @@
         },
 
         methods: {
+            onSelectFile(file){
+                this.logInfo('fileSelected',file);
+
+
+                this.editedItem.avatar = file;
+            },
             async getDatos () {
 
                 try{
@@ -218,26 +250,41 @@
 
                 this.loading = true;
 
+                let formData = new FormData();
+
+                Object.entries(this.editedItem).map( ([campo, valor],i) => {
+                    formData.append(campo,valor);
+                });
+
+                this.logInfo(formData);
+
+
+                const header = {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                };
+
                 try {
 
-                    const data = this.editedItem;
 
                     if(this.editedItem.id === 0){
 
                         const url = 'api/users';
 
-                        var res = await this.$axios.$post(url,data);
+                        var res = await this.$axios.$post(url,formData,header);
+
 
                     }else {
 
                         const url = 'api/users/'+this.editedItem.id;
 
-                        var res = await this.$axios.$patch(url,data);
+                        var res = await this.$axios.$patch(url,formData,header);
 
                     }
 
-                    this.notifySuccess('Listo!',res.message);
 
+                    this.notifySuccess('Listo!',res.message);
                     this.getDatos();
                     this.close();
 

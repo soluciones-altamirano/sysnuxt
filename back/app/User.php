@@ -37,7 +37,7 @@ class User extends Authenticatable
 
     protected $with = ['permissions','options'];
 
-    protected $appends = ['all_permissions'];
+    protected $appends = ['all_permissions','img'];
 
     /**
      * The attributes that are mass assignable.
@@ -45,7 +45,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'username','name', 'email', 'password','empresa_id','sucursal_id'
+        'username','name', 'email', 'password','empresa_id','sucursal_id','avatar'
     ];
 
     /**
@@ -136,5 +136,11 @@ class User extends Authenticatable
         $query->whereDoesntHave('sucursales',function ($q){
             $q->whereNull('desasignado');
         });
+    }
+
+
+    public function getImgAttribute()
+    {
+        return is_null($this->avatar) ? asset('img/avatar_none.png') : asset('storage/avatars/'.$this->avatar);
     }
 }

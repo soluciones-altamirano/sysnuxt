@@ -3,6 +3,7 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 use App\User;
 use Faker\Generator as Faker;
+use Faker\Provider\Image;
 use Illuminate\Support\Str;
 
 /*
@@ -24,5 +25,6 @@ $factory->define(User::class, function (Faker $faker) {
         'email_verified_at' => now(),
         'password' => bcrypt('admin'),
         'remember_token' => Str::random(10),
+        'avatar' => Image::image(storage_path() . '/app/public/avatars', 600, 350, 'people', false),
     ];
 });
