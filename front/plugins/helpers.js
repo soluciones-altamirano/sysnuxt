@@ -69,6 +69,16 @@ Vue.mixin({
 
 
         return arrayObjects;
+    },
+    backUrl(){
+
+      var back = this.$routerHistory.previous().path;
+
+
+      this.consolaJs('regresar',back);
+
+      this.$router.replace(back);
+
     }
   }
 })

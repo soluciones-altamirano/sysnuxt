@@ -105,16 +105,6 @@
                }
 
 
-            },
-            backUrl(){
-
-                var back = this.$routerHistory.previous().path;
-
-
-                console.log('regresar',this.$routerHistory.hasPrevious());
-
-                this.$router.replace(back);
-
             }
 
         }
