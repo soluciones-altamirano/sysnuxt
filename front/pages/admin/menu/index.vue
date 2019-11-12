@@ -2,11 +2,9 @@
   <div>
     <h1>Opciones</h1>
 
-    <v-card
-      class="mx-auto"
-      max-width="500"
-    >
+    <v-card class="mx-auto" max-width="500">
       <v-sheet class="pa-4 gray lighten-2" color="">
+
         <v-text-field v-model="search"
                       label="Buscar en opciones..."
                       dark

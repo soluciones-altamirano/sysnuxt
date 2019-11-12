@@ -33,6 +33,7 @@ module.exports = {
   */
   plugins: [
     '@plugins/helpers',
+    { mode: 'client', src: '~plugins/vue-router-back-button.js' },
   ],
   /*
   ** Nuxt.js dev-modules

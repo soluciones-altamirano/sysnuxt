@@ -1,34 +1,33 @@
 <template>
   <div>
-    <h1>Menu del usuario  {{titulo}}</h1>
+    <h1 class="mb-3">Menu del usuario  {{titulo}}</h1>
 
 
+    <v-card >
+      <v-card-text>
+        <v-treeview
+          selectable
+          open-all
+          :items="options"
+          selected-color="withe"
+          item-key="id"
+          v-model="activos"
+          dense
+        >
 
-    <v-container >
-      <v-row no-gutters >
-        <v-col  sm="12" >
+        </v-treeview>
+      </v-card-text>
 
-              <v-treeview
-                selectable
-                open-all
-                :items="options"
-                selected-color="withe"
-                item-key="id"
-                v-model="activos"
-              >
+      <v-card-actions class="px-5 py-5">
+        <v-btn @click="backUrl" outlined color="default">
+          CANCELAR
+        </v-btn>
+        <v-btn @click="save" outlined color="success" >
+          GUARDAR
+        </v-btn>
+      </v-card-actions>
+    </v-card>
 
-              </v-treeview>
-        </v-col>
-        <v-col sm12>
-            <v-btn @click="$router.back()" outlined color="default">
-                CANCELAR
-            </v-btn>
-            <v-btn @click="save" outlined color="success" >
-                GUARDAR
-            </v-btn>
-        </v-col>
-      </v-row>
-    </v-container>
   </div>
 </template>
 
@@ -105,6 +104,16 @@
                    this.consolaJs(error.response);
                }
 
+
+            },
+            backUrl(){
+
+                var back = this.$routerHistory.previous().path;
+
+
+                console.log('regresar',this.$routerHistory.hasPrevious());
+
+                this.$router.replace(back);
 
             }
 

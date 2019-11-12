@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model as Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Option
@@ -20,6 +21,8 @@ use Illuminate\Database\Eloquent\Model as Model;
  */
 class Option extends Model
 {
+
+    use SoftDeletes;
 
     public $table = 'options';
 
