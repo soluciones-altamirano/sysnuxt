@@ -1,17 +1,22 @@
 export const actions = {
-  async nuxtServerInit({ commit },{ $axios }) {
-    try{
-      const  res  = await $axios.$get('api/options');
+  async nuxtServerInit({ commit },{ $axios,$auth }) {
 
-      const menu = res.data;
+    //si el user esta autenticado llena el menu de opciones
+    if($auth.loggedIn){
 
-      // console.log('server init',menu);
+      try{
+        const  res  = await $axios.$get('api/options');
 
-      commit('menu/llenar',menu);
+        const menu = res.data;
 
-    }catch (e) {
+        // console.log('server init',menu);
 
-      console.error(e)
+        commit('menu/llenar',menu);
+
+      }catch (e) {
+
+        console.error(e)
+      }
     }
   }
 }
