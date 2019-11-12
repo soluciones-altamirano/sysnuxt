@@ -2,14 +2,35 @@
 
 import Vue from 'vue'
 
+let globalDebug = (process.env.APP_DEBUG == 'true');
+
+console.log('Debug:', globalDebug);
+
 Vue.mixin({
   methods:{
 
-    consolaJs(/*...*/) {
-      if (process.env.DEBUG || true) {
-        for (var i = 0; i < arguments.length; i++) {
-          console.log(arguments[i]);
-        }
+    logInfo(/*...*/) {
+      if (globalDebug) {
+        var orig = console.log;
+
+        orig.apply(console, arguments);
+
+      }
+    },
+    logError(/*...*/) {
+      if (globalDebug) {
+        var orig = console.error;
+
+        orig.apply(console, arguments);
+
+      }
+    },
+    logWarn(/*...*/) {
+      if (globalDebug) {
+        var orig = console.warn;
+
+        orig.apply(console, arguments);
+
       }
     },
     errorToList(errors){
@@ -75,7 +96,7 @@ Vue.mixin({
       var back = this.$routerHistory.previous().path;
 
 
-      this.consolaJs('regresar',back);
+      this.logInfo('regresar',back);
 
       this.$router.replace(back);
 

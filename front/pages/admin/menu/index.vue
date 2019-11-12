@@ -154,10 +154,10 @@
         middleware: 'auth',
         name: 'prueba',
         mounted(){
-            this.consolaJs("Componente prueba montado")
+            this.logInfo("Componente menu montado")
         },
         created(){
-            this.consolaJs("Componente prueba creado")
+            this.logInfo("Componente menu creado")
             // this.getDatos();
         },
         data: () => ({
@@ -223,11 +223,11 @@
                     this.items = res.data;
 
                 }catch (e) {
-                    this.consolaJs(e)
+                    this.logInfo(e)
                 }
             },
             create(padre){
-                this.consolaJs('nuevo opcion:',padre)
+                this.logInfo('nuevo opcion:',padre)
                 this.dialog = !this.dialog
                 this.newItem.option_id = padre ? padre.id : null;
                 this.newItem.ruta = padre ? '/'+padre.nombre.toLocaleLowerCase()+'/' : null;
@@ -235,7 +235,7 @@
 
             },
             edit(padre){
-                this.consolaJs('edit opcion:',padre)
+                this.logInfo('edit opcion:',padre)
 
                 this.dialog = !this.dialog
 
@@ -251,7 +251,7 @@
 
             },
             async destroy(){
-                this.consolaJs('destroy opcion:',this.itemDestroy)
+                this.logInfo('destroy opcion:',this.itemDestroy)
 
                 try {
                     const url = 'api/options/'+this.itemDestroy.id;
@@ -263,7 +263,7 @@
                     this.close();
 
                 }catch (e) {
-                    this.consolaJs(e.response)
+                    this.logInfo(e.response)
                 }
 
             },
@@ -294,7 +294,7 @@
                     this.close();
 
                 }catch (e) {
-                    this.consolaJs(e.response);
+                    this.logInfo(e.response);
 
                     var errors = e.response.data.errors;
 

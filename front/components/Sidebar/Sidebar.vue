@@ -45,6 +45,7 @@
                 open-on-click
                 :active.sync="active"
                 return-object
+                @update:active="cambioOpcion"
     >
       <template v-slot:prepend="{ item }">
         <v-icon v-text="`${item.icono_l}`"></v-icon>
@@ -55,6 +56,8 @@
 </template>
 
 <script>
+    import { mapMutations } from 'vuex'
+
     export default {
         name: "sidebar",
         data() {
@@ -65,26 +68,37 @@
                 active: [],
             }
         },
+        methods:{
+            ...mapMutations(['setCurrentOption']),
+            cambioOpcion(activo){
+                var option = activo[0];
+
+                /*si se vuelve a seleccionar la misma opción
+                * por defecto v-treeview desactiva la opcion*/
+                if (typeof option === "undefined"){
+                    this.active.push(this.currentOption);//volver a activar la opción
+
+                }else {
+                    this.$store.commit('menu/setCurrentOption',option);//guarda la opción seleccionada en el store
+                    this.logInfo('redirect to:',option.ruta);
+                    this.$router.replace(option.ruta);
+                }
+
+            }
+        },
         computed:{
             filter () {
                 return this.caseSensitive
                     ? (item, search, textKey) => item[textKey].indexOf(search) > -1
                     : undefined
             },
-            selected () {
-
-                const item = this.active[0];
-
-                return item;
+            currentOption(){
+               return  this.$store.state.menu.currentOption;
             }
 
         },
         watch: {
-            selected (item) {
-                this.consolaJs('redirect to :',item.ruta);
 
-                this.$router.replace(item.ruta);
-            },
         }
     }
 </script>

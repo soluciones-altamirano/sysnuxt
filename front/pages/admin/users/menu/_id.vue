@@ -36,7 +36,7 @@
     export default {
         middleware: 'auth',
         created(){
-            this.consolaJs("Componente Menu del usuario creado")
+            this.logInfo("Componente Menu del usuario creado");
             this.getDatos();
         },
         data: () => ({
@@ -66,14 +66,12 @@
         methods: {
             async getDatos () {
 
-                this.consolaJs("método get datos Menu del usuario");
 
                 try{
 
                     const id = this.$route.params.id;
 
                     const res = await this.$axios.$get('api/users/'+id);
-
 
                     this.user = res.data;
 
@@ -82,7 +80,7 @@
 
                 }catch (error) {
 
-                    console.log(error.data)
+                    this.logInfo(error.data)
                 }
 
 
@@ -96,12 +94,11 @@
 
                    const res = await this.$axios.$post(uri,data);
 
-                   this.consolaJs(res);
                    this.notifySuccess('Listo!',res.message);
 
                }catch (error) {
 
-                   this.consolaJs(error.response);
+                   this.logInfo(error.response);
                }
 
 

@@ -1,10 +1,14 @@
 export const state = () => ({
-  options: []
+  options: [],
+  currentOption: {}
 })
 
 export const mutations = {
     llenar(state,options){
       state.options = options
+    },
+    setCurrentOption(state,option){
+      state.currentOption= option
     }
 }
 
