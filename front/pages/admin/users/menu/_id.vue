@@ -37,21 +37,30 @@
         middleware: 'auth',
         created(){
             this.logInfo("Componente Menu del usuario creado");
-            this.getDatos();
         },
         data: () => ({
             loading: false,
             user: {},
             options: [],
-            activos:[]
+            activos: []
         }),
-        async asyncData ({ $axios }) {
+        async asyncData ({ $axios,params }) {
 
 
             try{
-                const  res  = await $axios.$get('api/options');
+                var id = params.id;
 
-                return { options: res.data }
+                const  resOp  = await $axios.$get('api/options');
+
+                const resUs = await $axios.$get('api/users/'+id);
+
+                console.log(id,resUs)
+
+                return {
+                    user: resUs.data,
+                    activos: resUs.data.option_ids,
+                    options: resOp.data
+                }
 
             }catch (e) {
                 return { error : e}
@@ -64,27 +73,6 @@
             }
         },
         methods: {
-            async getDatos () {
-
-
-                try{
-
-                    const id = this.$route.params.id;
-
-                    const res = await this.$axios.$get('api/users/'+id);
-
-                    this.user = res.data;
-
-                    this.activos = this.pluckArrayObjets(this.user.options,'id');
-
-
-                }catch (error) {
-
-                    this.logInfo(error.data)
-                }
-
-
-            },
             async save () {
 
                try{

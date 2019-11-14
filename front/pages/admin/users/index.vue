@@ -1,34 +1,16 @@
 <template>
 
-  <!--            Tabla de datos
-  ------------------------------------------------------------------------>
-  <v-data-table :headers="headers" :items="users" sort-by="calories" class="elevation-1" :loading="loadingDatos" loading-text="Cargando datos, por favor espere...">
+  <div>
 
-    <template v-slot:item.avatar="{ item }">
-      <v-avatar>
-        <img :src="item.img" :alt="item.username">
-      </v-avatar>
-    </template>
-
-
-    <template v-slot:top>
-
-      <v-toolbar flat color="dark">
-
-        <v-toolbar-title>Usuarios</v-toolbar-title>
-
-        <v-divider class="mx-4" inset vertical></v-divider>
-        <v-spacer></v-spacer>
-
-
-        <!--            Ventana modal del formulario
-        ------------------------------------------------------------------------>
+    <v-row>
+      <v-col>
+        <h1>Usuarios</h1>
+      </v-col>
+      <v-col>
         <v-dialog v-model="dialog" max-width="800px">
-
           <template v-slot:activator="{ on }">
-            <v-btn color="primary" light class="mb-2" v-on="on">Nuevo Usuario</v-btn>
+            <v-btn color="primary" light class="mb-2 float-right" v-on="on">Nuevo Usuario</v-btn>
           </template>
-
           <v-form @submit.prevent="save">
 
             <v-card class="pb-2">
@@ -68,7 +50,7 @@
                         placeholder="Elige un avatar"
                         prepend-icon="mdi-camera"
                         label="Avatar"
-                      @change="onSelectFile">
+                        @change="onSelectFile">
 
                       </v-file-input>
                     </v-col>
@@ -87,32 +69,55 @@
           </v-form>
 
         </v-dialog>
+      </v-col>
+    </v-row>
 
-      </v-toolbar>
-    </template>
+    <v-card>
+      <v-card-title>
+        <v-spacer></v-spacer>
+        <v-text-field v-model="search" append-icon="mdi-magnify" label="Buscar" single-line hide-details></v-text-field>
+      </v-card-title>
 
-    <!--            botones de acciones
+      <!--            Tabla de datos
     ------------------------------------------------------------------------>
-    <template v-slot:item.action="{ item }">
-      <v-btn @click="editItem(item)" color="mr-2 primary" fab x-small dark>
-        <v-icon > mdi-pencil </v-icon>
-      </v-btn>
-
-      <v-btn @click="menu(item)" color="mr-2 teal" fab x-small dark>
-        <v-icon > mdi-format-list-bulleted-type </v-icon>
-      </v-btn>
-      <v-btn @click="deleteItem(item)" color="mr-2 error" fab x-small dark>
-      <v-icon> mdi-delete </v-icon>
-      </v-btn>
-    </template>
+      <v-data-table :headers="headers" :items="users" sort-by="calories" class="elevation-1" :search="search" :loading="loadingDatos" loading-text="Cargando datos, por favor espere...">
 
 
-    <!-- Boton para cuando no hay datos en la tabla -->
-    <template v-slot:no-data>
-      <v-btn color="primary" @click="getDatos">Recargar</v-btn>
-    </template>
+        <!--            Avatar
+        ------------------------------------------------------------------------>
+        <template v-slot:item.avatar="{ item }">
+          <v-avatar>
+            <img :src="item.img" :alt="item.username">
+          </v-avatar>
+        </template>
 
-  </v-data-table>
+        <!--            botones de acciones
+        ------------------------------------------------------------------------>
+        <template v-slot:item.action="{ item }">
+          <v-btn @click="editItem(item)" color="mr-2 primary" fab x-small dark>
+            <v-icon > mdi-pencil </v-icon>
+          </v-btn>
+
+          <v-btn @click="menu(item)" color="mr-2 teal" fab x-small dark>
+            <v-icon > mdi-format-list-bulleted-type </v-icon>
+          </v-btn>
+          <v-btn @click="deleteItem(item)" color="mr-2 error" fab x-small dark>
+            <v-icon> mdi-delete </v-icon>
+          </v-btn>
+        </template>
+
+
+        <!-- Boton para cuando no hay datos en la tabla -->
+        <template v-slot:no-data>
+          <v-btn color="primary" @click="getDatos">Recargar</v-btn>
+        </template>
+
+      </v-data-table>
+    </v-card>
+
+
+  </div>
+
 
 
 
@@ -123,6 +128,7 @@
     export default {
         middleware: 'auth',
         data: () => ({
+            search: '',
             dialog: false,
             loadingDatos: true,
             loading: false,

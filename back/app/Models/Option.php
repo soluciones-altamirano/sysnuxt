@@ -88,4 +88,17 @@ class Option extends Model
     {
         return $this->nombre;
     }
+
+    public function scopePadres($query)
+    {
+        return $query->whereNull('option_id');
+    }
+
+    public function scopePadresDe($query,$chidres)
+    {
+        return $query->whereNull('option_id')->whereHas('children',function ($q)use ($chidres){
+                $q->whereIn('id',$chidres);
+        });
+    }
+
 }

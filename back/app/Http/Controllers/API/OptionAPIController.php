@@ -6,6 +6,7 @@ use App\Http\Requests\API\CreateOptionAPIRequest;
 use App\Http\Requests\API\UpdateOptionAPIRequest;
 use App\Models\Option;
 use App\Repositories\OptionRepository;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
 use Response;
@@ -40,7 +41,16 @@ class OptionAPIController extends AppBaseController
 //            $request->get('limit')
 //        );
 
-        $options = Option::whereNull('option_id')->get();
+        $user = auth()->user();
+//        $user = User::find(6);
+
+        if ($user->isDev() || $user->isSuperAdmin()){
+
+            $options = Option::padres()->get();
+        }else{
+            $options = $user->optionMenu();
+        }
+
 
         return $this->sendResponse($options->toArray(), 'Options retrieved successfully');
     }

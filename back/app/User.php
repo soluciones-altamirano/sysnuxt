@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\Empresa;
+use App\Models\Role;
 use App\Models\Sucursal;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -37,7 +38,7 @@ class User extends Authenticatable
 
     protected $with = ['permissions','options'];
 
-    protected $appends = ['all_permissions','img'];
+    protected $appends = ['all_permissions','img','option_ids'];
 
     /**
      * The attributes that are mass assignable.
@@ -142,5 +143,51 @@ class User extends Authenticatable
     public function getImgAttribute()
     {
         return is_null($this->avatar) ? asset('img/avatar_none.png') : asset('storage/avatars/'.$this->avatar);
+    }
+
+    public function getOptionIdsAttribute()
+    {
+        return $this->options->pluck('id');
+    }
+
+
+    public function isDev(){
+
+        return $this->hasRole(Role::DEVELOPER);
+    }
+
+    public function isSuperAdmin(){
+
+        return $this->hasRole(Role::SUPERADMIN);
+    }
+
+    public function isAdmin(){
+
+        return $this->hasRole(Role::ADMIN);
+    }
+
+    public function optionMenu()
+    {
+        $optionsUser = $this->options;
+
+        $childres = $optionsUser->pluck('id')->toArray();
+
+        $options = Option::padresDe($childres)->get();
+
+        $options = $options->map(function ($padre) use ($optionsUser){
+
+            $childrens = collect();
+
+            foreach ($optionsUser as $index => $option) {
+                if ($option->option_id==$padre->id){
+                    $childrens->push($option);
+                }
+            }
+
+            $padre->setRelation('children',$childrens);
+            return $padre;
+        });
+
+        return $options;
     }
 }
