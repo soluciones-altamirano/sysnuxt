@@ -108,6 +108,12 @@ class UserAPIController extends AppBaseController
             return $this->sendError('User not found');
         }
 
+
+        $file = $request->file('avatar');
+        $input['avatar'] = $file->hashName();
+
+        $file->store('avatars');
+
         if(!is_null($request->password) && !is_null($request->password_confirmation)){
             $user->password = bcrypt($request->password);
         }
