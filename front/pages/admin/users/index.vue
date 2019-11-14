@@ -34,14 +34,37 @@
                     </v-col>
 
 
-                    <v-col cols="12" sm="6" md="6" v-show="!editando">
+
+                    <v-col cols="12" sm="6" md="6" v-if="!editando">
                       <v-text-field type="password" v-model="editedItem.password" label="Contraseña"></v-text-field>
                     </v-col>
 
-                    <v-col cols="12" sm="6" md="6" v-show="!editando">
+                    <v-col cols="12" sm="6" md="6" v-if="!editando">
 
                       <v-text-field type="password" v-model="editedItem.password_confirmation" label="Confirmar Contraseña"></v-text-field>
                     </v-col>
+
+                    <v-expansion-panels v-if="editando">
+                      <v-expansion-panel>
+                        <v-expansion-panel-header>Editar Contraseña</v-expansion-panel-header>
+                        <v-expansion-panel-content>
+
+
+                          <v-row>
+                            <v-col cols="12" sm="6" md="6" >
+                              <v-text-field type="password" v-model="editedItem.password" label="Contraseña"></v-text-field>
+                            </v-col>
+
+                            <v-col cols="12" sm="6" md="6" >
+
+                              <v-text-field type="password" v-model="editedItem.password_confirmation" label="Confirmar Contraseña"></v-text-field>
+                            </v-col>
+                          </v-row>
+
+                        </v-expansion-panel-content>
+                      </v-expansion-panel>
+                    </v-expansion-panels>
+
 
                     <v-col>
                       <v-file-input
@@ -160,8 +183,8 @@
                 avatar: null
             },
             rules: [
-                value => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
-            ],
+                value => !value || value.size < 2000000 || 'El tamaño del avatar debe ser inferior a 2 MB!',
+            ]
         }),
 
         computed: {
@@ -202,7 +225,7 @@
 
                 }catch (error) {
 
-                    console.log(error)
+                    this.logInfo(error)
                 }
 
 
@@ -210,7 +233,11 @@
 
             editItem (item) {
 
-                this.editedItem = Object.assign({}, item);
+                this.editedItem.id = item.id;
+                this.editedItem.name = item.name;
+                this.editedItem.username = item.username;
+                this.editedItem.email = item.email;
+
                 this.dialog = true
             },
             menu(item){
@@ -236,7 +263,7 @@
                         this.notifySuccess('Listo!',res.message);
 
                     }catch (e) {
-                        console.log(e.response)
+                        this.logInfo(e.response)
                     }
                 }
 
@@ -256,10 +283,13 @@
 
                 this.loading = true;
 
-                let formData = new FormData();
+                var formData = new FormData();
 
                 Object.entries(this.editedItem).map( ([campo, valor],i) => {
-                    formData.append(campo,valor);
+
+                    if (valor){
+                        formData.append(campo,valor);
+                    }
                 });
 
                 this.logInfo(formData);
@@ -283,9 +313,14 @@
 
                     }else {
 
+                        this.logInfo('editar');
+
                         const url = 'api/users/'+this.editedItem.id;
 
-                        var res = await this.$axios.$patch(url,formData,header);
+                        formData.append('_method', 'PATCH');
+
+                        var res = await this.$axios.$post(url,formData,header);
+
 
                     }
 
@@ -295,7 +330,7 @@
                     this.close();
 
                 }catch (e) {
-                    console.log(e.response);
+                    this.logInfo(e.response);
 
                     var errors = e.response.data.errors;
 

@@ -55,13 +55,18 @@ class UserAPIController extends AppBaseController
     public function store(CreateUserAPIRequest $request)
     {
 
-        $file = $request->file('avatar');
 
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
-        $input['avatar'] = $file->hashName();
 
-        $file->store('avatars');
+
+        if ($request->hasFile('avatar') ){
+            $file = $request->file('avatar');
+
+            $input['avatar'] = $file->hashName();
+
+            $file->store('avatars');
+        };
 
         $user = $this->userRepository->create($input);
 
@@ -108,14 +113,18 @@ class UserAPIController extends AppBaseController
             return $this->sendError('User not found');
         }
 
+        if ($request->hasFile('avatar') ){
+            $file = $request->file('avatar');
 
-        $file = $request->file('avatar');
-        $input['avatar'] = $file->hashName();
+            $input['avatar'] = $file->hashName();
 
-        $file->store('avatars');
+            $file->store('avatars');
+        };
 
         if(!is_null($request->password) && !is_null($request->password_confirmation)){
-            $user->password = bcrypt($request->password);
+            $input['password'] = bcrypt($input['password']);
+        }else{
+            unset($input['password']);
         }
 
         $user = $this->userRepository->update($input, $id);
