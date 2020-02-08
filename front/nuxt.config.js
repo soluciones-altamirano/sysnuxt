@@ -8,6 +8,9 @@ module.exports = {
   ** Headers of the page
   */
   head: {
+    htmlAttrs: {
+      lang: 'es'
+    },
     titleTemplate: '%s - ' + process.env.npm_package_name,
     title: pkg.name,
     meta: [

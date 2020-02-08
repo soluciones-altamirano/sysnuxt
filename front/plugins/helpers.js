@@ -100,14 +100,11 @@ Vue.mixin({
 
       this.$router.replace(back);
 
+    },
+    _can(permissionName) {
+
+        return this.$auth.user.all_permissions.indexOf(permissionName) !== -1;
+
     }
   }
 })
-
-
-export default ({ app }, inject) => {
-
-
-  inject('myInjectedFunction', string => console.log('That was easy!', string));
-
-}
