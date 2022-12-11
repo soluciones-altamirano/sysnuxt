@@ -17,7 +17,7 @@
     "nuxt": "^2.0.0",
     "nuxt-izitoast": "^1.0.0",
     "cross-env": "^5.2.0",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "vue-router-back-button": "^1.2.3"
   },
   "devDependencies": {
